@@ -1,7 +1,7 @@
 # Modified Prusa i3 MK3
 
 
-Original Prusa i3 MK3 OpenScad files are hard to modify, because dimensions are hardcoded and often used redundantly. I am going to rewrite all parts parametricized with parameters stored in a single file.
+Original Prusa i3 MK3 OpenScad files are hard to modify, because dimensions are hardcoded and often used redundantly. I am going to rewrite all parts parametrized with parameters stored in a single file.
 
 List of rewritten parts:
 
