@@ -1,78 +1,46 @@
 // PRUSA iteration4
 // Y belt holder
 // GNU GPL v3
+// GNU GPL v3
+// Rewritten 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-module y_belt_holder()
-{
+use <polyholes.scad>
+use<fdmtools.scad>
+include <variables.scad>
 
-    difference()
-    {
-        // base block
-        union()
-        {
-            translate([-7,-24,44.5]) cube([14,48,8]);
-            translate([-5,-15,29]) cube([12,30,17]);
-        }
 
-        // belt entry 
-        translate([-7.5,-16,39.9]) rotate([0,45,0]) cube([3,32,3]);
-        translate([-7.5,-16,34.9]) rotate([0,45,0]) cube([3,32,3]);
-        
-        // lower belt slot
-        translate([-8.5,-16,34.2]) cube([11.5,32,0.75]);
-        translate([-8.5,-16,35.4]) rotate([0,5,0]) cube([11.5,32,0.2]);
-        translate([-8.5,-16,33.6]) rotate([0,-5,0]) cube([11.5,32,0.2]);
-        for (_step =[-16:2:16])
-        {
-            translate([-8.5,_step,33]) cube([11.5,1,1.5]);
+module bolthole(){
+    rotate([0,90,0]){
+        translate([-ybelth_thickn/2,(ybelth_bolt_distance-ybelth_bolt_adjust)/2,0]){
+            translate ([0,0,-ybelth_bolt_clamplen])mirror([0,0,1])rotate([0,0,90])longhole(ybelth_bolt_adjust,1.94*m3_through_dia,30);
+            translate ([0,0,1])mirror([0,0,1])rotate([0,0,90])longhole(ybelth_bolt_adjust,m3_through_dia,30);
+            
         }
-        
-        // upper belt slot
-        translate([-8.5,-16,39.2]) cube([11.5,32,0.75]);
-        translate([-8.5,-16,40.4]) rotate([0,5,0]) cube([11.5,32,0.2]);
-        translate([-8.5,-16,38.6]) rotate([0,-5,0]) cube([11.5,32,0.2]);
-        for (_step =[-17:2:16])
-        {
-            translate([-8.5,_step,38.2]) cube([11.5,1,1.5]);
-        }
-        
-        // nice edges
-        translate([-8,-20,21.8]) rotate([45,0,0]) cube([16,10,10]);
-        translate([-8,20,21.8]) rotate([45,0,0]) cube([16,10,10]);
-
-        translate([-8,-30,37]) rotate([45,0,0]) cube([16,10,10]);
-        translate([-8,30,37]) rotate([45,0,0]) cube([16,10,10]);
-        translate([-12.2,-30,44.4]) rotate([0,45,0]) cube([5,60,5]);
-        
-        // mounting screw holes
-        translate([0,-19.50,40]) cylinder( h=30, r=1.65, $fn=30 );
-        translate([0,19.50,40]) cylinder( h=30, r=1.65, $fn=30 );
-        translate([0,-19.25,40]) cylinder( h=30, r=1.65, $fn=30 );
-        translate([0,19.25,40]) cylinder( h=30, r=1.65, $fn=30 );
-        translate([0,-19.0,40]) cylinder( h=30, r=1.65, $fn=30 );
-        translate([0,19.0,40]) cylinder( h=30, r=1.65, $fn=30 );
-        
-        translate([0,-19.5,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        translate([0,19.5,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        translate([0,-19.25,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        translate([0,19.25,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        translate([0,-19.0,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        translate([0,19.0,43.5]) cylinder( h=7, r=3.1, $fn=30 );
-        
-    
     }
- 
-
 }
-
-difference()
-{
-    translate([-40,0,7]) rotate([0,90,0]) y_belt_holder();
-    //version   
-    translate([8.5,3.5,0.5]) rotate([0,180,90]) linear_extrude(height = 0.6) 
-    { text("R1",font = "helvetica:style=Bold", size=4, center=true); }
-}
+module toothedslot(dist){
+    translate([-dist,ybelth_grabwidth/2,(ybelth_thickn-belt_width)/2])rotate([0,0,270])toothslot(ybelth_grabwidth,belt_slot_height,belt_tooth_height);
     
+}
+module add(){
+    translate([-ybelth_flange,-(ybelth_bolt_distance+ybelth_bolt_adjust+9)/2,0]) cube([ybelth_flange,ybelth_bolt_distance+ybelth_bolt_adjust+9,ybelth_thickn]);
+    translate([-ybelth_lower-belt_slot_height-ybelth_flange/2,-ybelth_grabwidth/2,0])cube([ybelth_lower+belt_slot_height+ybelth_flange/2,ybelth_grabwidth,ybelth_thickn/2-belt_width/2+8]);
+}
+module cut(){
+    bolthole();
+    mirror([0,1,0])bolthole();
+    toothedslot(ybelth_upper);
+    toothedslot(ybelth_lower);
+    
+    translate([-ybelth_flange,0,ybelth_thickn])rotate([0,0,90])chamfer(1,200);
+        translate([-ybelth_lower-belt_slot_height-ybelth_flange/2,0,ybelth_thickn/2-belt_width/2+8])rotate([0,0,90])chamfer(2,200);
+    translate([-ybelth_flange,-(ybelth_bolt_distance+ybelth_bolt_adjust+9)/2,0])rotate([0,90,0])chamfer(1,50);
+    translate([-ybelth_flange,(ybelth_bolt_distance+ybelth_bolt_adjust+9)/2,0])rotate([0,90,0])chamfer(1,50);
+       translate([-ybelth_lower-belt_slot_height-ybelth_flange/2,-ybelth_grabwidth/2,0])rotate([0,90,0])chamfer(2,50);
+    translate([-ybelth_lower-belt_slot_height-ybelth_flange/2,ybelth_grabwidth/2,0])rotate([0,90,0])chamfer(2,50);
+
+}
+    difference(){add(); cut();}

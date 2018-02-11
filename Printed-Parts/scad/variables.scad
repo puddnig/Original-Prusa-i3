@@ -1,3 +1,6 @@
+// GNU GPL v3
+// 2018 <puddnig@gmail.com>
+
 use<polyholes.scad>
 
 
@@ -13,6 +16,19 @@ rod_xz_distance=15;
 cube_width=17;
 //overhang_rear=0;
 cube_height=58;
+//Dimensions of y belt holder
+ybelth_bolt_distance=38.5;
+ybelth_bolt_adjust=0.5;
+ybelth_bolt_clamplen=2;
+ybelth_upper=12.55;
+ybelth_lower=17.55;
+ybelth_flange=8;
+ybelth_thickn=14;
+ybelth_grabwidth=30;
+//Belt dimensione
+belt_slot_height=1.95;
+belt_tooth_height=1.25;
+belt_width=6;
 
 rp_dia=7.8; //Rodpocket
 dia_wp=10; //Wastepocket

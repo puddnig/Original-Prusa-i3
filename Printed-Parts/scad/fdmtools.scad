@@ -53,4 +53,13 @@ module chamfer(xx,width){
     rotate([45,0,0])cube([width,1.41*xx,1.41*xx],center=true);
 }
 
-chamfer(1,10);
+module toothslot(length,sh,th){
+    module tooth(){
+        rotate([90,0,90])translate([0,0,1])difference(){
+            linear_extrude(height=2.001,center=true) polygon([[0,0],[0,9],[sh+2.693,9],[sh+0.215,6.523],[sh,4.062],[sh,0]]);
+            linear_extrude(height=1.5) polygon([[th,-1],[th,4.642],[0.815*th,7.18],[0.16,8],[-0.843,8],[-0.843,-1]]);
+        }
+    }
+    for(a=[0:2:length-2]) translate([a,-sh,0]) tooth();
+}
+toothslot(30,1.95,1.25);
