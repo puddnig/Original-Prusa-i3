@@ -2,6 +2,8 @@ use<polyholes.scad>
 
 
 m3_through_dia=3.2;
+square_nut_w=6;
+square_nut_d=2;
 rod_h=6; //Distance upper x_rod to top of part (bottom here)
 rod_distance=45; //distance between x rods
 rod_xz_distance=15;
@@ -50,6 +52,7 @@ xstepper_bolt_distance=31;
 tighten_range=5;
 rear_flange_distance=62;
 xstepper_guide_setback=2;
+xstepper_guide_height=8;
 xstepper_cutout_dia=25;
 xstepper_bolt_length=18;
 xstepper_bolt_depth=4;

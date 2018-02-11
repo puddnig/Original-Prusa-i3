@@ -34,7 +34,7 @@ module cut(){
     translate([-50,xstepper_setback,xstepper_height+5]) cube(100,100,100);
     rf=-rod_xz_distance-cube_width/2;
     sg=xstepper_guide_setback+0.01;
-    translate([0,0,8])linear_extrude(height=100) polygon( points=[[rf+sg,bearing_diameter/2],[rf+sg,100],[rf+sg-10,100],[rf+sg-10,-30]] );
+    translate([0,0,xstepper_guide_height])linear_extrude(height=100) polygon( points=[[rf+sg,bearing_diameter/2],[rf+sg,100],[rf+sg-10,100],[rf+sg-10,-30]] );
 
     //adding chamfers
     translate([0,xstepper_setback,cube_height])chamfer(6,100);
@@ -44,7 +44,7 @@ module cut(){
 
 }
 module add(){
-    x_end(rear_flange_distance,-3,xstepper_height);
+    x_end(rear_flange_distance,-7,xstepper_height);
     translate([xstepper_z_distance,xstepper_setback,xstepper_height])xstepper_holes(17,10);
     translate([-belt_offset+xstepper_z_distance-cube_width-0.01,bearing_diameter/2,0])cube([belt_offset+0.01,rear_flange_distance,cube_height]);
     translate([-belt_offset+xstepper_z_distance,bearing_diameter/2,0])cube([belt_offset+0.01,rear_flange_distance,cube_height]);
