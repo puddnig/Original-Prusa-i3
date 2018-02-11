@@ -25,7 +25,7 @@ module xstepper_holes_chamfer(hh,dd1,dd2){
 
 module cut(){
     translate([0,xstepper_setback,xstepper_height]){
-        xstepper_holes(50,3.2);
+        xstepper_holes(50,m3_through_dia);
         translate ([xstepper_z_distance+0.02,0,0])xstepper_holes_chamfer(cube_width+belt_offset-xstepper_guide_setback+xstepper_bolt_depth-xstepper_bolt_length,10,6);
         
         rotate([-90,0,90]) longhole(5,xstepper_cutout_dia,50);

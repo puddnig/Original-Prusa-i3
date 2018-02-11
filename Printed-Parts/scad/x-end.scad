@@ -131,8 +131,8 @@ module nut_trap()
     translate(v=[0,0, -0.1]) cylinder(h = 0.5, r1 = 1.085*nut_inner, r = nut_inner, $fn = 25);
 
 // Screw holes for TR nut
-    translate([0, 9.5, -1]) cylinder(h = 10, r = 1.8, $fn=25);
-    translate([0, -9.5, -1]) cylinder(h = 8, r = 1.8, $fn=25);
+    translate([0, 9.5, -1]) cylinder(h = 10, d=m3_through_dia, $fn=25);
+    translate([0, -9.5, -1]) cylinder(h = 8, d=m3_through_dia, $fn=25);
 
 // Nut traps for TR nut screws
     translate([0, bolt_distance_nut/2, 4]) cylinder(h = 10, r = 3.45, $fn=6);

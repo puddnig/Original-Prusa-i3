@@ -1,4 +1,7 @@
 use<polyholes.scad>
+
+
+m3_through_dia=3.2;
 rod_h=6; //Distance upper x_rod to top of part (bottom here)
 rod_distance=45; //distance between x rods
 rod_xz_distance=15;
