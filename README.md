@@ -5,12 +5,12 @@ Original Prusa i3 MK3 OpenScad files are hard to modify, because dimensions are 
 
 List of rewritten parts:
 
-*x-end-idler
-*x-end-motor
+* x-end-idler
+* x-end-motor
 
 Added parts:
 
--x-tensioner
+* x-tensioner
 
 **Links**
 
