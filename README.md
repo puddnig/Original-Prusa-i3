@@ -7,6 +7,7 @@ List of rewritten parts:
 
 * x-end-idler
 * x-end-motor
+* y-belt-holder
 
 Added parts:
 
