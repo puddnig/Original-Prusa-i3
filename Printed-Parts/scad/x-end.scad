@@ -8,53 +8,14 @@
 
 use <polyholes.scad>
 use <fdmtools.scad>
-
-rod_h=6; //Distance upper x_rod to top of part (bottom here)
-rod_distance=45; //distance between x rods
-rod_xz_distance=15;
-//rod_z_flange=28.5;//Distanze Z-rod to side of part in Y direction
-
-rod_xend_z_distance=1; //Distance between end of x rod to center of z rod in y direction
-cube_width=17;
-overhang_rear=0;
-cube_height=58;
-
-rp_dia=7.8; //Rodpocket
-dia_wp=10; //Wastepocket
-wp_length_straight=4;
-wp_length_taper=3;
-
-belt_offset=3;
-bs_h=28; //height beltslot
-bs_w=10; //width beltslot
-end_adjust=0.1;
-bearing_reinforcement=1.2;
-bearing_diameter=14.95;
-bs_to_top=14;
-
-bearing_holder_wall = 3;
-
-nut_outer=12.5; //radius
-nut_inner=7; //radius
-nut_height=8;
-nut_offset=17;
-bolt_distance_nut=19;
-nut_trap_reinf_height= 32;
-nut_reinf_pushback=0.92;
-nut_reinf_wall=4.5;
-nut_reinf_rotate=20;
+include <variables.scad>
 
 
-nut_outer_corr=correctedRadius(nut_outer,sides(nut_outer));
-nut_inner_corr=correctedRadius(nut_inner,sides(nut_inner));
-
-rod_z_flange=nut_offset+correctedRadius(nut_outer,sides(nut_outer));
-rp_depth=rod_z_flange-rod_xend_z_distance; //depth of rodpocket
-
-
-bearing_size = bearing_diameter + 2 * bearing_holder_wall;
+module x_end(overhang_rear,rod_xend_z_distance,belt_center_height){
+    
 cube_depth=overhang_rear+rod_z_flange+bearing_holder_wall+bearing_diameter/2;
 bs_d=cube_depth+end_adjust; //depth beltslot
+rp_depth=rod_z_flange-rod_xend_z_distance; //depth of rodpocket positive inward
 module pushfit_rod() {
 
     rp_dia_corr=correctedDiameter(rp_dia);
@@ -80,7 +41,7 @@ module window(){
 module belt_cutout(bs_ww){
     module cubec(){
         cube(size = [bs_ww,bs_d+1,bs_h], center = true);}
-    translate(v=[0,bs_d/2-0.5,bs_h/2])
+    translate(v=[0,bs_d/2-0.5,bs_h/2-28.25+belt_center_height])
     {
         difference()
         {
@@ -95,9 +56,6 @@ module belt_cutout(bs_ww){
         }
     }}
         
-module stress_relieve(){
-    
-    }
  module bigcube(){
      translate (v=[-cube_width/2,0,0]) cube([cube_width,cube_depth,cube_height]);
  }
@@ -201,7 +159,7 @@ difference() {
 
 
 
-module x_end(){
+module x_end0(){
     difference(){
         union() {
             translate([-rod_xz_distance,-rod_z_flange,0])     x_interface();
@@ -219,14 +177,15 @@ module x_end(){
         
     }
 }
+x_end0();
+}
 
-
-module selective_infill(){
+/*module selective_infill(){
     intersection(){
         x_end();
         translate([0,-nut_offset,-0.2])infill_cylinder(2*nut_outer_corr-0.4,2*     nut_inner_corr, nut_height);
     }
-}
+}*/
 
-x_end();
+x_end(0,1,28.25);
 //selective_infill();
