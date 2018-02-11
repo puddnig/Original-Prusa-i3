@@ -13,6 +13,8 @@ module infill_cube(x,y,z){
     for (a=[0:infill_distance:nfills(x,0)*infill_distance-0.0001]) 
     translate(v=[a+xdiff(x,0)/2,infill_width,infill_width] )hollow_cube(y-2*infill_width,z-2*infill_width);
 }
+
+
 module wall_cylinder(dd1,hh){
     difference() {
        
@@ -21,7 +23,8 @@ module wall_cylinder(dd1,hh){
         }
     }
     
-module infill_cylinder (dd1,dd2,hh) {
+module infill_cylinder (dd1,dd2,hh) //dd1>dd2
+    {
     rout=dd1/2;
     rin=dd2/2;
     for (a=[rin:infill_distance:nfills(rout,0)*infill_distance-0.0001]) translate([0,0,infill_width])
