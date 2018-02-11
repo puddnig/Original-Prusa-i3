@@ -1,109 +1,232 @@
 // PRUSA iteration4
 // X end prototype
 // GNU GPL v3
+// 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-use <bearing.scad>
 use <polyholes.scad>
-rod_distance = 45;
+use <fdmtools.scad>
 
-module x_end_base()
-{
-    // Main block
-    height = 58;
-    translate(v=[-15,-9,height/2]) cube(size = [17,39,height], center = true);
-    
-    // Bearing holder
-    vertical_bearing_base();	
-    
-    //Nut trap
-    // Cylinder
-    translate(v=[0,-17,0]) poly_cylinder(h = 8, r=12.5, $fn=25);
-    translate(v=[-6,-10.6,8]) rotate([0,0,48.2]) cube(size = [10,5,1], center = true);
-    
-    // Nut brace
-    rotate([90,0,-15,]) translate ([-1, 8, 24])linear_extrude(height = 4) polygon( points=[[0,0],[0,12],[8,0]] ); 
-    rotate([90,0,-50,]) translate ([9, 8, -0.6])linear_extrude(height = 4) polygon( points=[[0,0],[0,12],[8,0]] ); 
-    
+rod_h=6; //Distance upper x_rod to top of part (bottom here)
+rod_distance=45; //distance between x rods
+rod_xz_distance=15;
+//rod_z_flange=28.5;//Distanze Z-rod to side of part in Y direction
+
+rod_xend_z_distance=1; //Distance between end of x rod to center of z rod in y direction
+cube_width=17;
+overhang_rear=0;
+cube_height=58;
+
+rp_dia=7.8; //Rodpocket
+dia_wp=10; //Wastepocket
+wp_length_straight=4;
+wp_length_taper=3;
+
+belt_offset=3;
+bs_h=28; //height beltslot
+bs_w=10; //width beltslot
+end_adjust=0.1;
+bearing_reinforcement=1.2;
+bearing_diameter=14.95;
+bs_to_top=14;
+
+bearing_holder_wall = 3;
+
+nut_outer=12.5; //radius
+nut_inner=7; //radius
+nut_height=8;
+nut_offset=17;
+bolt_distance_nut=19;
+nut_trap_reinf_height= 32;
+nut_reinf_pushback=0.92;
+nut_reinf_wall=4.5;
+nut_reinf_rotate=20;
+
+
+nut_outer_corr=correctedRadius(nut_outer,sides(nut_outer));
+nut_inner_corr=correctedRadius(nut_inner,sides(nut_inner));
+
+rod_z_flange=nut_offset+correctedRadius(nut_outer,sides(nut_outer));
+rp_depth=rod_z_flange-rod_xend_z_distance; //depth of rodpocket
+
+
+bearing_size = bearing_diameter + 2 * bearing_holder_wall;
+cube_depth=overhang_rear+rod_z_flange+bearing_holder_wall+bearing_diameter/2;
+bs_d=cube_depth+end_adjust; //depth beltslot
+module pushfit_rod() {
+
+    rp_dia_corr=correctedDiameter(rp_dia);
+    dia_wp_corr=correctedDiameter(dia_wp);
+    rp_h_straight=1+rp_depth-wp_length_straight-wp_length_taper;
+    translate ([0,0,-1]) union(){
+    cylinder (h=rp_h_straight, d=rp_dia_corr);
+    translate (v=[0,0,rp_h_straight]) cylinder(h=wp_length_taper, d1=2*correctedRadius(rp_dia/2,sides(dia_wp_corr)), d2=dia_wp_corr);
+    translate (v=[0,0,rp_h_straight+wp_length_taper]) cylinder (h=wp_length_straight, d=dia_wp_corr);
+    translate (v=[1.416,0,0]) rotate (a=[0,0,22.5]) cylinder (h=rp_depth, d=0.8*rp_dia, $fn=8);
+    }
 }
-module reinforcement_selective_infill()
-{
-    rotate([90,0,-15,]) translate ([-1.5, 8, 26])linear_extrude(height = 0.2) polygon( points=[[-2,0],[0,12],[8,0]] ); 
-    
-    rotate([90,0,-50,]) translate ([8.5, 8, 1.4])linear_extrude(height = 0.2) polygon( points=[[0,0],[0,12],[12,0]] ); 
+
+
+
+
+
+module window(){
+    h3=cube_height-rod_distance-rod_h;
+    translate ([-2,-4+rp_depth,-h3+cube_height])cube (size=[4,4,h3+1]);
 }
-    
-   
-    
-module x_end_holes()
-{
-    vertical_bearing_holes();
-    // Belt hole
-    translate(v=[-1,0,0])
+
+module belt_cutout(bs_ww){
+    module cubec(){
+        cube(size = [bs_ww,bs_d+1,bs_h], center = true);}
+    translate(v=[0,bs_d/2-0.5,bs_h/2])
     {
-        // Stress relief
-        translate(v=[-5.5-10+1.5,-10-1,30]) cube(size = [18,1,28], center = true);
         difference()
         {
-        
-        translate(v=[-5.5-10+1.5,-10,30]) cube(size = [10,46,28], center = true);
-
+        cubec();
         // Nice edges
-        translate(v=[-5.5-10+1.5-5,-10,30+23]) rotate([0,20,0]) cube(size = [10,46,28], center = true);
-        translate(v=[-5.5-10+1.5+5,-10,30+23]) rotate([0,-20,0]) cube(size = [10,46,28], center = true);
-        translate(v=[-5.5-10+1.5,-10,30-23]) rotate([0,45,0]) cube(size = [10,46,28], center = true);
-        translate(v=[-5.5-10+1.5,-10,30-23]) rotate([0,-45,0]) cube(size = [10,46,28], center = true);
+        mout=5-(bs_ww/2);
+        translate(v=[-bs_ww/2+mout,0,23]) rotate([0,20,0]) cubec();
+        translate(v=[bs_ww/2-mout,0,23]) rotate([0,-20,0]) cubec();
+        translate(v=[bs_ww/2-5-mout,0,-23]) rotate([0,45,0]) cubec();
+        translate(v=[-bs_ww/2+5+mout,0,-23]) rotate([0,-45,0]) cubec();
 
         }
+    }}
+        
+module stress_relieve(){
+    
     }
+ module bigcube(){
+     translate (v=[-cube_width/2,0,0]) cube([cube_width,cube_depth,cube_height]);
+ }
+ module bigcube_pretty1(){
+     module center(){translate ([0,0,-cube_height/2])bigcube();} 
+     module rotate1(alpha) {rotate ([0,alpha,0]) scale ([1,1.1,1])center();}
+     translate([cube_width/1.3,-0.01,5]) rotate1(20);
+     translate([cube_width/1.3,-0.01,cube_height-5]) rotate1(-20);
+ }
+module bigcube_pretty2(){
+     difference(){
+            translate([belt_offset,0,0]) bigcube();
+            translate([belt_offset,0,0]) bigcube_pretty1();
+
+            }}
 
 
-// Bottom pushfit rod
-    translate(v=[-15,-41,6]) rotate(a=[-90,0,0]) pushfit_rod(7.8,50);
+module vertical_bearing_base()
+{
+ translate ([-rod_xz_distance+cube_width/2,-bearing_size/2,0])cube([rod_xz_distance-cube_width/2,bearing_size,cube_height]);
+ cylinder(h = 58, r=bearing_size/2, $fn = 90);
+}
 
-// Top pushfit rod
-    translate(v=[-15,-41.5,rod_distance+6]) rotate(a=[-90,0,0]) pushfit_rod(7.8,50);
+module vertical_bearing_holes()
+{
+    
+    
+  translate(v=[0,0,-1]) poly_cylinder(h = cube_height+4, r=(bearing_diameter/2));
+  translate(v=[0,0,-0.1]) cylinder(r1=(bearing_diameter/2)+0.7,r2=(bearing_diameter/2), h=0.5);
+  rotate(a=[0,0,-40]) translate(v=[bearing_diameter/2-2.9,-0.5,0.5]) cube(size = [bearing_holder_wall*2,1,cube_height+4]);
 
-// TR Nut trap
+}
+
+module nut_cylinder(h){
+        cylinder(h = h, r=nut_outer_corr, $fn=sides(nut_outer));
+        
+    }
+    
+module nut_reinf(){
+    module nut_reinf_add(){
+         translate([0,0,nut_height]) nut_cylinder(nut_trap_reinf_height);   
+        rotate([0,0,-135]) translate([-nut_outer_corr,0,nut_height])cube([nut_reinf_wall,nut_outer_corr,nut_trap_reinf_height]);
+    }
+    
+    module nut_reinf_rem(){
+         translate([0,0,nut_height-0.001]) cylinder(r=nut_outer_corr-nut_reinf_wall,h=nut_trap_reinf_height+0.01);
+        rotate([0,0,-135])  translate([-nut_outer_corr+nut_reinf_wall,0,nut_height+0.001]) cube([2*(nut_outer_corr-nut_reinf_wall),nut_outer_corr,nut_trap_reinf_height]);  
+        translate([0,nut_outer_corr,nut_trap_reinf_height+nut_height]) rotate ([0,90,nut_reinf_rotate])linear_extrude(height=3*nut_outer_corr,center=true)scale([nut_trap_reinf_height/nut_outer_corr,nut_reinf_pushback]) circle(r=nut_outer_corr);
+    }
+    difference(){
+        nut_reinf_add();
+        nut_reinf_rem();}
+}
+module nut_trap()
+{
+
+    //Nut trap
+    // Cylinder
+    
+    nut_cylinder(nut_height);
+    rotate([0,0,-135])  translate([-nut_outer_corr,0,0]) cube([2*nut_outer_corr,nut_outer_corr,nut_height]);
+    
+    
+    
+    
+
+}
+    module nut_trap_cutout()
+{
+ 
    // Hole for the nut
-    translate(v=[0,-17, -1]) poly_cylinder(h = 9.01, r = 7, $fn = 25);
-    translate(v=[0,-17, -0.1]) cylinder(h = 0.5, r1 = 6.8+0.8,r2 = 7, $fn = 25);
+    translate(v=[0,0, -1]) poly_cylinder(h = nut_height+1.01, r = nut_inner, $fn = 25);
+    translate(v=[0,0, -0.1]) cylinder(h = 0.5, r1 = 1.085*nut_inner, r = nut_inner, $fn = 25);
 
 // Screw holes for TR nut
-    translate(v=[0,-17, 0]) rotate([0, 0, -135]) translate([0, 9.5, -1]) cylinder(h = 10, r = 1.8, $fn=25);
-    translate(v=[0,-17, 0]) rotate([0, 0, -135]) translate([0, -9.5, -1]) cylinder(h = 8, r = 1.8, $fn=25);
+    translate([0, 9.5, -1]) cylinder(h = 10, r = 1.8, $fn=25);
+    translate([0, -9.5, -1]) cylinder(h = 8, r = 1.8, $fn=25);
 
 // Nut traps for TR nut screws
-    translate(v=[0,-17, 0]) rotate([0, 0, -135]) translate([0, 9.5, 4]) rotate([0, 0, 0])cylinder(h = 5, r = 3.45, $fn=6);
+    translate([0, bolt_distance_nut/2, 4]) cylinder(h = 10, r = 3.45, $fn=6);
 
-    translate(v=[0,-17, 0]) rotate([0, 0, -135]) translate([0, -9.5, 4]) rotate([0, 0, 30])cylinder(h = 3, r = 3.2, $fn=6);
-    translate([-5.5,-17.2,4]) rotate([0,0,30]) cube([5,5,3]);
-    translate([-0,-17.2,4]) rotate([0,0,60]) cube([5,10,3]);
+    translate([0, -bolt_distance_nut/2, 4]) rotate([0,0, 30]) cylinder(h = 3, r = 3.2, $fn=6);
+    
+    translate([0,- bolt_distance_nut/2+5.5,4]) cylinder(h=3, r=5,$fn=6);
+
 }
-
-
-// Final prototype
-module x_end_plain()
-{
-    difference()
-    {
-        x_end_base();
-        x_end_holes();
+module x_interface(){
+difference() {
+    union(){
+    bigcube();
+       bigcube_pretty2();
+        translate ([rod_xz_distance,rod_z_flange-nut_offset,0]) rotate ([0,0,-135])nut_reinf();
+        }
+     translate([belt_offset,0,bs_to_top])belt_cutout(bs_w);
+    
+    window();
+    translate ([-cube_width+0.001,-1,0]) scale ([1,2,1])bigcube_pretty2();
+    
     }
 }
 
-x_end_plain();
 
 
-module pushfit_rod(diameter,length)
-{
-    poly_cylinder(h = length, r=diameter/2);
-    difference()
-    {
-        translate(v=[0,-diameter/2.85,length/2]) rotate([0,0,45]) cube(size = [diameter/2,diameter/2,length], center = true);
-        translate(v=[0,-diameter/4-diameter/2-0.4,length/2]) rotate([0,0,0]) cube(size = [diameter,diameter/2,length], center = true);
+module x_end(){
+    difference(){
+        union() {
+            translate([-rod_xz_distance,-rod_z_flange,0])     x_interface();
+            vertical_bearing_base();
+            translate ([0,-17,0]) rotate ([0,0,-135]) nut_trap();
+            
+
+        }
+       // translate([belt_offset-rod_xz_distance,- rod_z_flange,bs_to_top])belt_cutout();
+        vertical_bearing_holes();
+        translate ([0,-17,0]) rotate ([0,0,-135]) nut_trap_cutout();
+        translate (v=[-rod_xz_distance,-rod_z_flange,rod_h])rotate    ([-90    ,-90,0]) pushfit_rod();
+        translate (v=[-rod_xz_distance,-rod_z_flange,rod_h+rod_distance     ])rotate ([-90,-90,0]) pushfit_rod();
+        translate([belt_offset-rod_xz_distance,-rod_z_flange,bs_to_top])belt_cutout(bs_w-2*bearing_reinforcement);
+        
     }
 }
 
+
+module selective_infill(){
+    intersection(){
+        x_end();
+        translate([0,-nut_offset,-0.2])infill_cylinder(2*nut_outer_corr-0.4,2*     nut_inner_corr, nut_height);
+    }
+}
+
+x_end();
+//selective_infill();
