@@ -1,7 +1,6 @@
 // PRUSA iteration4
 // Y belt holder
 // GNU GPL v3
-// GNU GPL v3
 // Rewritten 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
@@ -22,7 +21,7 @@ module bolthole(){
     }
 }
 module toothedslot(dist){
-    translate([-dist,ybelth_grabwidth/2,(ybelth_thickn-belt_width)/2])rotate([0,0,270])toothslot(ybelth_grabwidth,belt_slot_height,belt_tooth_height);
+    translate([-dist,ybelth_grabwidth/2+0.5,(ybelth_thickn-belt_width)/2])rotate([0,0,270])toothslot(ybelth_grabwidth+2,belt_slot_height,belt_tooth_height);
     
 }
 module add(){

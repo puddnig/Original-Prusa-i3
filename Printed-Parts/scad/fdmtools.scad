@@ -63,3 +63,15 @@ module toothslot(length,sh,th){
     for(a=[0:2:length-2]) translate([a,-sh,0]) tooth();
 }
 toothslot(30,1.95,1.25);
+
+
+module fillet(radius,height){
+    translate([-radius,-radius,0]){
+    difference(){
+    translate([0,0,-height/2])cube([1.2*radius,1.2*radius,height]);
+    cylinder(r=radius,h=height*1.1,center=true);
+    }
+}
+}
+
+//fillet(10,30);
