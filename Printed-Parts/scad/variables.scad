@@ -30,6 +30,22 @@ belt_slot_height=1.95;
 belt_tooth_height=1.25;
 belt_width=6;
 
+//Y Motor HOlder
+
+ymh_bolt_clamping_length_frame=3.5;
+ymh_bolt_clamping_length_stepper=5;
+ymh_bolt_height=18;
+ymh_bolt_distance=22;
+ymh_height=48;
+ymh_width=19;
+ymh_stepper_down=21;//from top of rear frame
+ymh_stepper_in=21;
+ymh_stepper_side=13;
+ymh_flange=7;
+hex_nut_od=6.4;
+
+//X end
+
 rp_dia=7.8; //Rodpocket
 dia_wp=10; //Wastepocket
 wp_length_straight=4;
@@ -61,6 +77,7 @@ idler_height=28.5;
 idler_inward=15.5;
 stress_relieve_height=27.5;
 stress_relieve_offset=4.5;
+
 //Variables used by x-end-motor:
 xstepper_height=30.25;
 xstepper_width=42.5;

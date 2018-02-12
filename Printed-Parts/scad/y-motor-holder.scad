@@ -1,81 +1,60 @@
 // PRUSA iteration4
-// Y motor holder
+// Z axis bottom holder
 // GNU GPL v3
+// 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-module holder()
-{
-    difference()
-    {
-        // base body
-        translate([-6,-1.5,0]) cube([19,42,47]);
+include<variables.scad>
+use<fdmtools.scad>
+use<polyholes.scad>
 
-        // shape cuts
-        translate([-20,19.5,26]) rotate([0,90,0]) cylinder( h=35, r=12, $fn=30 );   
-        translate([-11,20,15]) cube([26,23,64]);
-        translate([-20,5.5,-1]) cube([26,41,64]);
-        translate([-20,-5,37]) cube([26,21,20]);
-        translate([-20,-1,37]) cube([26,30,20]);
-        
-        // lower motor screw
-        translate([-20,35 ,10.5]) rotate([0,90,0]) cylinder( h=40, r=1.65, $fn=30 ); 
-        translate([-7,35,10.5]) rotate([0,90,0]) cylinder( h=15, r=3.1, $fn=30 );         
-        
-        // upper motor screw    
-        translate([-20,4,41.5]) rotate([0,90,0]) cylinder( h=40, r=1.65, $fn=30 );         
-        translate([4,4,41.5]) rotate([0,90,0]) cylinder( h=4, r=3.1, $fn=30 );         
-        
-        // lower frame screw    
-        translate([0,12,7]) rotate([90,0,0]) cylinder( h=40, r=1.6, $fn=30 ); 
-        translate([0,7,7]) rotate([90,0,0]) cylinder( h=5, r=3.2, $fn=6 ); 
-        translate([0,6.6,7]) rotate([90,0,0]) cylinder( h=2, r2=3.2, r1=4, $fn=6 ); 
-        
-        // upper frame screw    
-        translate([0,12,29]) rotate([90,0,0]) cylinder( h=40, r=1.6, $fn=30 ); 
-        translate([0,7,29]) rotate([90,0,0]) cylinder( h=5, r=3.2, $fn=6 ); 
-        translate([0,6.6,29]) rotate([90,0,0]) cylinder( h=2, r2=3.2, r1=4, $fn=6 );
 
-        // corners
-        translate([-10,20,42]) rotate([45,0,0]) cube([60,10,10]);        
-        translate([-10,-5,42]) rotate([45,0,0]) cube([60,10,10]);        
-        translate([-10,38,-7]) rotate([45,0,0]) cube([60,20,10]);        
-        translate([-10,43,10]) rotate([45,0,0]) cube([60,20,20]);  
-        translate([-14,-10,-2]) rotate([0,45,0]) cube([10,50,10]);        
-        translate([-14,-10,37]) rotate([0,45,0]) cube([10,50,10]);        
-        translate([18,-10,-5]) rotate([0,0,45]) cube([10,10,60]);        
+module stepbolt(){
+translate([-1,0,-1])longhole(2,m3_through_dia,15);
+translate([-1,0,ymh_bolt_clamping_length_stepper])longhole(2,1.8*m3_through_dia,10);
     }
-    
-    // reinforcement
-    translate([7.8,1.9,0]) rotate([0,0,55]) cube([5,5,18]);
-    difference()
-        {
-            translate([7.8,1.9,13.6]) rotate([0,0,55]) cube([5,5,23.4]);
-            translate([-20,19.5,26]) rotate([0,90,0]) cylinder( h=35, r=12, $fn=30 );   
-        }
-   
+module hexhole(){
+rotate([0,90,0]){
+cylinder(d=m3_through_dia,h=30,center=true,$fn=25);
+translate([0,0,ymh_bolt_clamping_length_frame])cylinder(d=hex_nut_od,h=20,$fn=6);
+translate([0,0,ymh_bolt_clamping_length_frame+2])cylinder(d1=hex_nut_od,d2=hex_nut_od+2,h=5,$fn=6);}
 }
- 
-module y_motor_holder()
-{
-    rotate([0,90,0])
-    difference()
-        {
-        holder();
-       
-        // selective infill
-        translate([-0,1,33]) cube([12,0.5,2]);        
-        translate([-3,1,2]) cube([15,0.5,1]);        
-        translate([-5,1.5,13]) cube([17,0.5,8]);        
+module add(){
+translate([-ymh_stepper_in,-ymh_stepper_down,0])cube([xstepper_width,ymh_height,ymh_width]);
+}
+module cut(){
+    translate([-ymh_stepper_in+ymh_flange,-50,ymh_flange])difference(){
+    cube([100,100,40]);
+        rotate([90,180,0])fillet(5,250);
+    }
+    translate([xstepper_bolt_distance/2,xstepper_bolt_distance/2,0]) stepbolt();
+    translate([-xstepper_bolt_distance/2,-xstepper_bolt_distance/2,0]) stepbolt();
+    translate([0,0,-1])cylinder(d=xstepper_cutout_dia+1,h=50);
+    translate([-8,-50+8,-1])cube([50,50,50]);
+    //upper notch
+    translate([-30,ymh_bolt_height-ymh_stepper_down-5,ymh_flange])difference(){
+translate([0,-50,0])cube([50,50,50]);
+rotate([0,90,0])fillet(3,100);
         
-        //version
-        translate([-1,-1,15]) rotate([90,0,0]) linear_extrude(height = 0.6) 
-        { text("R1",font = "helvetica:style=Bold", size=5, center=true); }
-        }
-}    
-    
-y_motor_holder();    
-    
+}
+translate([xstepper_width-ymh_stepper_down,ymh_height-ymh_stepper_down,0])rotate([0,0,0])fillet(7,50);
+translate([xstepper_width-ymh_stepper_down,8,0])rotate([0,0,-90])fillet(4,50);
+translate([-8,-ymh_stepper_down,0])rotate([0,0,-90])fillet(4,50);
+//chamfers
+translate([-xstepper_width/2,ymh_bolt_height-ymh_stepper_down-5,ymh_width])chamfer(4,30);
+translate([-xstepper_width/2,ymh_height-ymh_stepper_down,ymh_width])chamfer(4,30);
+        translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height,ymh_stepper_side])hexhole();
+        translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height+ymh_bolt_distance,ymh_stepper_side])hexhole();
+}
+
+difference(){add(); cut();}
+
+
+
+
+
+
     
     
