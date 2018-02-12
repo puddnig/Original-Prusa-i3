@@ -20,8 +20,8 @@ cube_height=58;
 ybelth_bolt_distance=38.5;
 ybelth_bolt_adjust=0.5;
 ybelth_bolt_clamplen=2;
-ybelth_upper=12.55;
-ybelth_lower=17.55;
+ybelth_upper=14.3;
+ybelth_lower=18.3;
 ybelth_flange=8;
 ybelth_thickn=14;
 ybelth_grabwidth=30;
@@ -63,6 +63,7 @@ stress_relieve_height=27.5;
 stress_relieve_offset=4.5;
 //Variables used by x-end-motor:
 xstepper_height=30.25;
+xstepper_width=42.5;
 xstepper_setback=33;
 xstepper_bolt_distance=31;
 tighten_range=5;
@@ -74,6 +75,18 @@ xstepper_bolt_length=18;
 xstepper_bolt_depth=4;
 //Tensioner
 tens_height=4;
+
+//
+zrod_frame_distance=29.3;
+zab_stepper_flange=5;
+zab_frame_flange=8;
+zab_lower_bolt=12;
+zab_bolt_spacing=20;
+zab_reinf_inner=6;
+zab_reinf_outer=4;
+zab_bolt_clamping_length=4;
+//nut_offset=17;
+
 //nema17 Bolt pattern
 sd=xstepper_bolt_distance/2;
 nema17_pattern=[[sd,sd,0],[sd,-sd,0],[-sd,-sd,0],[-sd,sd,0]];
