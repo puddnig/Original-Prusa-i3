@@ -69,7 +69,7 @@ module fillet(radius,height){
     translate([-radius,-radius,0]){
     difference(){
     translate([0,0,-height/2])cube([1.2*radius,1.2*radius,height]);
-    cylinder(r=radius,h=height*1.1,center=true);
+    cylinder(r=radius,h=height*1.1,center=true,$fn=sides(2*radius));
     }
 }
 }

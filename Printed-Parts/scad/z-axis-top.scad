@@ -1,107 +1,107 @@
 // PRUSA iteration4
-// Z axis top holder
+// Z axis bottom holder
 // GNU GPL v3
+// 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-module z_top_base()
-{
-    translate([0,-5,0]) cube([8,45,16]); // plate touching the base
-    translate([0,-5,0]) cube([33,3.9,12]); // plate touching the base
-    translate([0,-5,0]) cube([38,45,5]); // plate touching the base   
-    translate([25+4.3,3.2,5]) rotate([0,0,0]) cylinder(h = 2.5, r=7, $fn=60);
+include<variables.scad>
+use<fdmtools.scad>
+use<polyholes.scad>
+
+
+
+module zat(){
+module cut(){
+    translate([zrod_frame_distance,-zat_bolt_to_rod,zat_bolt_frame_top-zat_bolt_to_rp]){poly_cylinder(r=rp_dia/2,h=20,n=25);//rod holder
+        translate([0,nut_offset,0])cylinder(d=zat_tr_dia,h=20,$fn=25);//cutout for threaded rod
+        translate([0,zat_bolt_to_rod,10])cube([2,nut_offset,20],center=true);//stress relieve betweet holes
+    }
+    
+    module bolthole(){
+        rotate([0,90,0]){
+            cylinder(d=m3_through_dia,h=30,center=true,$fn=25);
+            translate([0,0,zat_bolt_clamping]){
+                cylinder(d=1.8*m3_through_dia,h=15,$fn=25);
+                translate([-20,-0.9*m3_through_dia,0])cube([20,1.8*m3_through_dia,15]);
+            }
+        }
+    }
+    
+    translate([0,0,zat_bolt_frame_top])bolthole();
+    translate([0,zat_bolt_distance,zat_bolt_frame_top])bolthole();
+    
+    translate([zat_frame_flange,-(zat_pocket_outer/2+zat_bolt_to_rod-zat_brace),zat_brace]){
+        difference(){
+            cube([50,50,50]); rotate([90,180,0])fillet(2.5,100);
+             rotate([90,180,90])fillet(2.5,100); 
+            rotate([0,180,90])fillet(3.5,100);//fillet top to flange
+            }
+      
+            
+    }
+    
+            translate([zat_bolt_clamping,-(zat_pocket_outer/2+zat_bolt_to_rod+zat_brace),zat_bolt_frame_top+zat_bolt_to_register]){
+        difference(){
+            cube([50,50,50]); rotate([90,180,0])fillet(1,100);
+            } 
+        } 
+                    translate([zat_frame_flange,nut_offset-zat_bolt_to_rod+zat_pocket_outer/2,-1]){
+        difference(){
+            cube([50,50,50]); rotate([0,0,180])fillet(4,100);
+            } 
+        }
+        //Front_corners_rounded
+        translate([zrod_frame_distance+zat_pocket_outer/2,-zat_bolt_to_rod-zat_pocket_outer/2,0])rotate([0,0,-90])fillet(zat_pocket_outer/2,40);
+translate([zrod_frame_distance+zat_pocket_outer/2,-zat_bolt_to_rod+zat_pocket_outer/2+nut_offset,0])rotate([0,0,])fillet(zat_pocket_outer/2,40);
+        rotate([0,90,0])translate([0,zat_bolt_distance+10,0])rotate([0,0,])fillet(5,40);
+        translate([zrod_frame_distance,-25,zat_brace])cube([50,50,50]);
+        //Oval cut
+        ch=zat_bolt_frame_top-zat_brace+zat_bolt_to_register;
+translate([zrod_frame_distance,0,ch+zat_brace])rotate([90,0,0])linear_extrude(height=50,center=true)scale([(zrod_frame_distance-zat_frame_flange)/ch,1]) circle(r=ch,$fn=30);
+        
+        //chamfer_to_frame
+        module chamfer1(){
+            
+            
+translate([-20,-25,-10])cube([20,50,40]);
+}
+translate([0,-zat_bolt_frame_side,0])rotate([0,0,60])chamfer1();
+
+
+module chamfer2(){
+        module chamfer1(){
+translate([-20,-25,-15])cube([20,50,40]);
+}
+translate([0,-zat_bolt_frame_side,0])rotate([0,-45,60])chamfer1();}
+translate([0,0,5])chamfer2();
+
+module chamfer3(){
+        module chamfer1(){
+translate([-20,-25,-15])cube([20,50,40]);
+}
+translate([0,-zat_bolt_frame_side,0])rotate([0,45,60])chamfer1();}
+translate([0,0,zat_bolt_frame_side+2])chamfer3();
 }
 
-module z_top_fancy()
-{
-    // Corner cutouts
-    translate([0.5,0.5,0]) rotate([0,0,-45-180]) translate([-15,0,-1]) cube([30,30,51]);    
-
-    // frame side angle
-    translate([-13,40+5+10.2,-3]) rotate([0,0,-45-0]) translate([0,0,-1]) cube([30,30,51]);
-    translate([8,28,-3]) translate([0,0,-1]) cube([50,50,51]);       
-
-    // cut to shape
-    translate([4,-1,12]) rotate([0,0, 0]) translate([0,-5,0]) cube([30,50,30]);          
-    translate([6,0,12]) rotate([0,-45, 0]) translate([0,-5,0]) cube([30,50,30]);
-    translate([8,3.9,10]) rotate([0,-45, 0]) translate([0,-5,0]) cube([30,50,30]);
-
-    // nice edges
-    translate([38-2.5,-5+2.5,-3]) rotate([0,0,-45-90]) translate([-15,0,-1]) cube([30,30,51]);         
-    translate([-10,49,3.2]) rotate([45,0,0]) translate([-15,0,-1]) cube([50,20,20]);         
-    
-    // outer corner
-    translate([35,26,-3]) rotate([0,0,-45])    translate([-15,0,-1]) cube([30,30,51]);
-    translate([0,0,5]) rotate([45+180,0,0]) rotate([0,0,-45+90]) translate([0,0,-15]) cube([30,30,30]);
-
-    // Stiffner cut out
-    translate([33,-1,7.5]) rotate([0,-45,0]) translate([0,-5,0]) cube([30,50,30]);
-    
-    // side cut out
-    translate([-6,-5,-5.55]) rotate([45,0,0])  cube([50,5,5]);
-    translate([-6,-5,-0.8]) rotate([0,45,0])  cube([5,50,5]);
+module add(){
+    translate([0,-zat_pocket_outer/2-zat_bolt_to_rod,0])cube([zrod_frame_distance+zat_pocket_outer/2,10+zat_bolt_distance+zat_pocket_outer/2+zat_bolt_to_rod,zat_bolt_frame_top+5]);
 }
 
-module z_top_holes()
-{
-    // Screw holes frame
-    translate([-1,10,10])      rotate([0,90,0]) cylinder(h = 20, r=1.8, $fn=30);
-    translate([-1,10+20,10])   rotate([0,90,0]) cylinder(h = 20, r=1.8, $fn=30);
+difference(){ add();cut();}
 
-    // Screw heads
-    translate([4,10,10]) rotate([0,90,0]) cylinder(h = 20, r=3.1, $fn=30);
-    translate([4,10-3.1,10]) cube([10,6.2,10]);
-    translate([4,10+20,10])  rotate([0,90,0]) cylinder(h = 20, r=3.1, $fn=30);
-    translate([4,10+20-3.1,10]) cube([10,6.2,10]);
-
-    // Z rod holder
-    translate([25+4.3,3,0.6]) rotate([0,0,0]) cylinder(h = 50, r=4.10, $fn=50);
-    translate([25+4.3,3,3.4]) rotate([0,0,0]) cylinder(h = 4.2, r2=4.3, r1=4, $fn=50);
-    
-    // material saving cut
-    translate([16,10,-4]) rotate([0,0,0]) cylinder(h = 50, r=8, $fn=6);  
-    translate([16,28,-4]) rotate([0,0,0]) cylinder(h = 50, r=8, $fn=6);  
-
-    // z screw hole
-    translate([25+4.3,3+17,3]) rotate([0,0,0]) cylinder(h = 50, r=5.8, $fn=15); // screw hole
-    translate([25+4.3,3+17,0.6]) rotate([0,0,0]) cylinder(h = 50, r=5.8, $fn=15); // screw hole
-    translate([25+4.3-1,3,0.6]) cube([2,15,8]); // it's bit up because it helps with printing
-    
-    //selective infill
-    translate([36.5,1.5,0.5]) cube([0.1,20,3.5]);    
-    translate([10,-3,0.5]) cube([22,0.1,3.5]);  
-    translate([3,1,0.5]) cube([18,0.1,3.5]);    
-    translate([1.5,19,0.5]) cube([21,0.1,3.5]); 
- 
-}
-
-module z_top_right(){
-    difference()
-    {
-        z_top_base();
-        z_top_fancy();
-        z_top_holes();
-         //version
-        translate([12,-1.5,10]) rotate([90,180,180]) linear_extrude(height = 0.6) 
-        { text("R1",font = "helvetica:style=Bold", size=4, center=true); }
+translate([zrod_frame_distance,-zat_bolt_to_rod,zat_brace]) difference(){
+cylinder(r=correctedRadius(rp_dia/2+3,25),h=zat_brace-1.5,$fn=25);
+translate([0,0,-0.005])cylinder(r1=correctedRadius(rp_dia/2,25),$fn=sides(rp_dia/2),r2=correctedRadius(rp_dia/2,25)+0.2,h=zat_brace-1.5+0.01);
+    translate([-1,0,-1]) cube([2,10,10]);
     }
 }
-
-module z_top_left(){
-    translate([0,-12,0]) mirror([0,1,0]) 
-    difference()
-    {
-        z_top_base();
-        z_top_fancy();
-        z_top_holes();
-        //version
-        translate([19,-1,10]) rotate([90,180,0]) linear_extrude(height = 0.6) 
-        { text("R1",font = "helvetica:style=Bold", size=4, center=true); }
-    }
-}
-
-// Final parts
-z_top_left();
-z_top_right();
-
+module zat_left(){translate([0,zat_pocket_outer/2+zat_bolt_to_rod+3,0]) zat();}
+module zat_right(){mirror([0,1,0])zat_left();
+    
+   }
+zat_left();
+zat_right();
+//missing:
+//cutout for faster printing

@@ -76,7 +76,7 @@ xstepper_bolt_depth=4;
 //Tensioner
 tens_height=4;
 
-//
+//z axis bottom
 zrod_frame_distance=29.3;
 zab_stepper_flange=5;
 zab_frame_flange=8;
@@ -85,8 +85,19 @@ zab_bolt_spacing=20;
 zab_reinf_inner=6;
 zab_reinf_outer=4;
 zab_bolt_clamping_length=4;
-//nut_offset=17;
-
+//
+// z axis top
+zat_bolt_distance=20;
+zat_bolt_frame_side=10;
+zat_bolt_frame_top=10.2;
+zat_brace=4;
+zat_tr_dia=11.6;
+zat_bolt_to_rp=9.6;
+zat_bolt_to_register=2;
+zat_bolt_to_rod=7;
+zat_bolt_clamping=4;
+zat_frame_flange=8;
+zat_pocket_outer=16;
 //nema17 Bolt pattern
 sd=xstepper_bolt_distance/2;
 nema17_pattern=[[sd,sd,0],[sd,-sd,0],[-sd,-sd,0],[-sd,sd,0]];
