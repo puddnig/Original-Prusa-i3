@@ -10,6 +10,7 @@ List of rewritten parts:
 * y-belt-holder
 * z-axis-bottom
 * z-axis-top
+
 Added parts:
 
 * x-tensioner
