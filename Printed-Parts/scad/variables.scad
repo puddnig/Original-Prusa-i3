@@ -10,6 +10,7 @@ square_nut_d=2;
 rod_h=6; //Distance upper x_rod to top of part (bottom here)
 rod_distance=45; //distance between x rods
 rod_xz_distance=15;
+hex_nut_od=6.4;
 //rod_z_flange=28.5;//Distanze Z-rod to side of part in Y direction
 
 //rod_xend_z_distance=1; //Distance between end of x rod to center of z rod in y direction

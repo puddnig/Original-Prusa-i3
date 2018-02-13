@@ -1,5 +1,5 @@
 // PRUSA iteration4
-// Z axis bottom holder
+// y motor holder
 // GNU GPL v3
 // 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
@@ -25,31 +25,33 @@ module add(){
 translate([-ymh_stepper_in,-ymh_stepper_down,0])cube([xstepper_width,ymh_height,ymh_width]);
 }
 module cut(){
+    union(){
     translate([-ymh_stepper_in+ymh_flange,-50,ymh_flange])difference(){
-    cube([100,100,40]);
-        rotate([90,180,0])fillet(5,250);
+    cube([40,80,20]);
+        translate([0,70,0])rotate([90,180,0])fillet(5,70);
     }
     translate([xstepper_bolt_distance/2,xstepper_bolt_distance/2,0]) stepbolt();
     translate([-xstepper_bolt_distance/2,-xstepper_bolt_distance/2,0]) stepbolt();
-    translate([0,0,-1])cylinder(d=xstepper_cutout_dia+1,h=50);
-    translate([-8,-50+8,-1])cube([50,50,50]);
+    translate([0,0,-1])cylinder(d=xstepper_cutout_dia+1,h=20);
+    translate([-8,-50+8,-1])cube([50,50,20]);
     //upper notch
     translate([-30,ymh_bolt_height-ymh_stepper_down-5,ymh_flange])difference(){
-translate([0,-50,0])cube([50,50,50]);
-rotate([0,90,0])fillet(3,100);
+translate([0,-30,0])cube([50,30,20]);
+rotate([0,90,0])fillet(3,60);
         
 }
-translate([xstepper_width-ymh_stepper_down,ymh_height-ymh_stepper_down,0])rotate([0,0,0])fillet(7,50);
-translate([xstepper_width-ymh_stepper_down,8,0])rotate([0,0,-90])fillet(4,50);
-translate([-8,-ymh_stepper_down,0])rotate([0,0,-90])fillet(4,50);
+translate([xstepper_width-ymh_stepper_down,ymh_height-ymh_stepper_down,0])rotate([0,0,0])fillet(7,20);
+translate([xstepper_width-ymh_stepper_down,8,0])rotate([0,0,-90])fillet(4,20);
+translate([-8,-ymh_stepper_down,0])rotate([0,0,-90])fillet(4,20);
 //chamfers
 translate([-xstepper_width/2,ymh_bolt_height-ymh_stepper_down-5,ymh_width])chamfer(4,30);
 translate([-xstepper_width/2,ymh_height-ymh_stepper_down,ymh_width])chamfer(4,30);
         translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height,ymh_stepper_side])hexhole();
         translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height+ymh_bolt_distance,ymh_stepper_side])hexhole();
-}
+}}
 
 difference(){add(); cut();}
+
 
 
 

@@ -1,124 +1,91 @@
 // PRUSA iteration4
 // Einsy doors
 // GNU GPL v3
+// 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-module body()
-{
-    // side panels
-    cube([105.5,87.5,1.5]);  
-    cube([105.5,2,16]);  
-    cube([2,87.5,16]);   
 
-    // corner reinforcement
-    translate([98,1,0]) cube([7.5,5,16]);   
-    translate([0.5,0.5,0]) cube([5,6.5,16]);  
-    translate([1,0,0]) cube([10,87.5,6]);   
-    translate([99.5,0,0] ) cube([6,87.5,7]); 
-    translate([10,0,0]) cube([6,5,6]);   
+include<variables.scad>
+include<variables_einsy.scad>
+use<fdmtools.scad>
+use<polyholes.scad>
+use<Einsy-base.scad>
 
-    // screw thread body
-    translate([54,2,0]) cube([9.5,6,16]); 
 
-    // rounded side
-    translate([0,87.5,4.5]) rotate([0,90,0]) cylinder( h=105.5, r=4.5, $fn=30);
+    module add_door(){
+        cube([case_width,case_height,case_thickn]);
 
-    // upper hinge reinforcement
-    translate([0.5,69,-9]) rotate([20,0,0]) cube([26,20,10]); 
-    
-    // door closing
-    translate([4,3.5,12.8]) rotate([0,0,0]) cylinder( h=3.2, r1=1.8, r2=3.5, $fn=30);  
-    translate([102,3.5,12.8]) rotate([0,0,0]) cylinder( h=3.2, r1=1.8, r2=3.5, $fn=30); 
-}
-
-module ventilation_holes()
-    {
-    for ( i = [0 : 9] )
-    {
-        translate([40 + (i*6),10.5,-1]) cube([3.65,19+50,1.2]);
-        translate([40 + (i*6),10.5,-1]) cube([3.65,19,10]);
-        translate([40 + (i*6),10.5+25,-1]) cube([3.65,19,10]);
-        translate([40 + (i*6),10.5+50,-1]) cube([3.65,19,10]);
+        translate([0,hinge_lower_height,0])support();
+        translate([0,hinge_upper_height-supp_width-case_thickn_top,0])support();
+                translate([0,hinge_lower_height,case_thickn])support();
+        translate([0,hinge_upper_height-supp_width-case_thickn_top,case_thickn])support();
+        //Walls
+        translate([0,case_height-case_thickn_top,0])cube([case_width, case_thickn_top,door_height])    ;
+        translate([case_width-case_thickn,0,0])cube([case_thickn,case_height,door_height])    ;
+        //Wall Reinforcements
+         translate([hinge_to_frame,case_height-case_thickn_top,0])rotate([0,0,270])quarter_eighth(door_height);   
+ translate([case_width-case_thickn,case_height-case_thickn_top,0])rotate([0,0,180])quarter_eighth(door_height); 
+ translate([case_width-case_thickn,closing_hole_height,0])rotate([0,0,180])quarter_eighth(door_height); 
+ translate([case_width-case_thickn,closing_hole_height,0])rotate([0,0,90])quarter_eighth(door_height); 
+translate([case_width-case_thickn,center_lower,0])rotate([0,0,180])quarter_eighth(door_height);
+       translate([case_width-case_thickn,center_lower,0])rotate([0,0,90])quarter_eighth(door_height); 
+//Center cylinders
+        
+translate([case_width-center_in,center_lower,door_height-center.z-0.1])cylinder(d2=center.x+0.1,d1=center.y+0.1,h=center.z+0.2,$fn=20);
+translate([case_width-center_in,case_height-center_in,door_height-center.z-0.1])cylinder(d2=center.x+0.1,d1=center.y+0.1,h=center.z+0.2,$fn=20);
+   
+    //upper corner support
+        translate([case_width-case_thickn,case_height-25-case_thickn_top,case_thickn])rotate([0,0,90])intersection(){
+    cube([25,9,9]);
+    translate([12.5,0,0])chamfer(9,25);}
+        //hinge_support
+    difference(){
+      cube([2*hinge_to_frame,case_height,2*hinge_to_frame]);
+            translate([2*hinge_to_frame,case_height/2+1,2*hinge_to_frame])rotate([0,0,90])chamfer(4,case_height);
     }
-    for ( i = [0 : -4] )
-    {
-      translate([40 + (i*6),10.5,-1]) cube([3.65,19+50,1.2]);
-    }
-    for ( i = [-6 : -7] )
-    {
-      translate([46 + (i*6),20.5,-1]) cube([3.65,19+40,1.2]);
-    }
-    
-    translate([15,10,1]) cube([20,55,1.5]);  
-}
+    }  
 
-module cutouts()
-{
-    // door closing screw
-    translate([58.5,4,1]) cylinder( h = 17, r = 1.8, $fn=30);  
-    translate([58.5,4,14.5]) cylinder( h = 2.6, r1 = 1.8, r2=2.2, $fn=30); 
-    translate([58.5,4,11.5])
-    {
-        translate([0,0,2.5]) cube([5.7,3.8,1], center=true);
-        translate([0,0,3]) cube([3.8,3.8,1], center=true);
-    }
-
-    ventilation_holes();
-    
-    // rounded side cutoff    
-    translate([26.5,87.5,4.5]) rotate([0,90,0]) cylinder( h = 73, r = 3.5, $fn=30);   
-    translate([26.5,80,5]) cube([73,19,10]); 
-    translate([26.5,82.5,1]) cube([73,5,10]); 
-    
-    // upper hinge cut
-    translate([0,60,-10]) cube([30,30,10]);  
-    translate([-1,87.5,0]) cube([22.5,10,10]); 
-
-    // upper hinge 
-    translate([2,80,6]) cube([19.5,10,10]);       
-    translate([-2,89.7,3]) rotate([70,0,0]) cube([19.5,10,5]);     
-    translate([-5,87.5,4.5]) rotate([0,90,0]) cylinder( h = 26.5, r = 2.5, $fn=30);  
-
-    // hinge hole
-    translate([-5,87.5,4.5]) rotate([0,90,0]) cylinder( h = 120, r = 2.6, $fn=30);  
-
-    // door closing 
-    translate([4,3.5,12.9]) rotate([0,0,0]) cylinder( h = 3.2, r1 = 1.2, r2= 2.8, $fn=30);  
-    translate([102,3.5,12.9]) rotate([0,0,0]) cylinder( h = 3.2, r1 = 1.2, r2= 2.8, $fn=30);  
-
-    // M3 nut
-    translate([55.65,0.5,12]) cube([5.7,10,2.2]);  
-
-    // side panel lightning slot
-    translate([2,10,3] ) cube([7,65,5]);  
-    translate([101,10,3] ) cube([3,70,5]);  
-
-    // corners - cut
-    translate([53,3,1.5]) rotate([0,0,70]) cube([10,10,50]);  
-    translate([61,12,1.5]) rotate([0,0,-70]) cube([10,10,50]);  
-    translate([16,2,1.5]) rotate([0,0,45]) cube([5,5,50]);  
-
-}
-
-module Einsy_doors()
-{
-difference()
-{
-    body();
-    cutouts();
-    // large corner cut
-    translate( [0 , -20, -3] ) rotate([0,45,45]) cube( [ 30, 30 , 20 ] );  
-
-    translate([30,79,1]) rotate([0,0,-90]) linear_extrude(height = 0.8) 
-    { text("R1",font = "helvetica:style=Bold", size=6, center=true); }    
-}
-}
+    module cut_door(){
+        difference(){
+        translate(vent_coord)vent();
+            translate([0,vent_coord.y+vent_n_door*vent_spacing,2*vent_rib_height])cube([case_width,50,(vent_n-vent_n_door)*vent_spacing]);
+        }
+ //Center cylinders
+        
+translate([case_width-center_in,center_lower,door_height-center.z-0.1])cylinder(d2=center.x+0.1,d1=center.y+0.1,h=center.z+0.2,$fn=20);
+translate([case_width-center_in,case_height-center_in,door_height-center.z-0.1])cylinder(d2=center.x+0.1,d1=center.y+0.1,h=center.z+0.2,$fn=20);
  
-Einsy_doors();
+
+        //closing hole
+        translate([case_width-closing_hole_in,closing_hole_height,1]){
+            cylinder(h=door_height+2,d=closing_hole,$fn=25);
+        }
+     
+        //lower_corner
+        translate([case_width,corner_cut,0])cutcube();
+        translate([case_width-corner_cut,case_height-corner_cut,-3])cutcube2();
+        //lower wide cut
+        translate([-1,-1,-1])cube([case_width+2,hinge_lower_height+1,door_height+2]);
+        //door_radius
+        translate([0,(case_height+2)/2,0])rotate([-90,90,0])fillet(hinge_to_frame,case_height);
+        //upper hinge
+         translate([-1,hinge_upper_height,-0.5])cube([hinge_to_frame+1,case_height-hinge_upper_height+1,door_height+1]);
+           translate([hinge_to_frame,hinge_upper_height-hinge_pocket,hinge_to_frame])rotate([-90,0,0])cylinder(d=hinge_inner,h=case_height-hinge_upper_height+1+hinge_pocket,$fn=25);
+        //lower_hinge
+                   translate([hinge_to_frame,hinge_lower_height-1,hinge_to_frame])rotate([-90,0,0])cylinder(d=hinge_inner,h=1+hinge_pocket,$fn=25);
+           translate([-3*square_nut_w/2+case_width-closing_hole_in,-square_nut_w/2+closing_hole_height,-square_nut_d+door_height-closing_nut_down])cube([2*square_nut_w,square_nut_w,1.3*square_nut_d]);
+  
+    }
+mirror([1,0,0])   difference(){add_door(); cut_door();}
+   // 
+   
+
+
+ 
     
-    
+
     
     
     
