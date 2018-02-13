@@ -57,7 +57,8 @@ bs_h=28; //height beltslot
 bs_w=10; //width beltslot
 end_adjust=0.1;
 bearing_reinforcement=1.2;
-bearing_diameter=14.95;
+bearing_diameter=14.8;
+bearing_height=25;
 bs_to_top=14;
 
 bearing_holder_wall = 3;

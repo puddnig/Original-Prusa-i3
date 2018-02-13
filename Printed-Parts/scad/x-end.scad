@@ -83,7 +83,13 @@ module vertical_bearing_holes()
 {
     
     
+difference(){
   translate(v=[0,0,-1]) poly_cylinder(h = cube_height+4, r=(bearing_diameter/2));
+translate([0,0,cube_height/2])difference(){
+    poly_cylinder(h=cube_height-2*bearing_height-2, r=(bearing_diameter/2)+1,center=true);
+    poly_cylinder(h=cube_height-2*bearing_height, r=(bearing_diameter/2)-0.6,center=true);
+}
+}
   translate(v=[0,0,-0.1]) cylinder(r1=(bearing_diameter/2)+0.7,r2=(bearing_diameter/2), h=0.5);
   rotate(a=[0,0,-40]) translate(v=[bearing_diameter/2-2.9,-0.5,0.5]) cube(size = [bearing_holder_wall*2,1,cube_height+4]);
 
