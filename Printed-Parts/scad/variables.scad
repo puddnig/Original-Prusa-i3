@@ -3,10 +3,14 @@
 
 use<polyholes.scad>
 
+idler_dia_belt=14.6;
+pulley_dia_belt=10.6;
+frog_to_frame=2.6;
 
 m3_through_dia=3.2;
 square_nut_w=6;
 square_nut_d=2;
+lock_nut_od=6.4;
 rod_h=6; //Distance upper x_rod to top of part (bottom here)
 rod_distance=45; //distance between x rods
 rod_xz_distance=15;
@@ -17,19 +21,7 @@ hex_nut_od=6.4;
 cube_width=17;
 //overhang_rear=0;
 cube_height=58;
-//Dimensions of y belt holder
-ybelth_bolt_distance=38.5;
-ybelth_bolt_adjust=0.5;
-ybelth_bolt_clamplen=2;
-ybelth_upper=14.3;
-ybelth_lower=18.3;
-ybelth_flange=8;
-ybelth_thickn=14;
-ybelth_grabwidth=30;
-//Belt dimensione
-belt_slot_height=1.95;
-belt_tooth_height=1.25;
-belt_width=6;
+
 
 //Y Motor HOlder
 
@@ -45,6 +37,19 @@ ymh_stepper_side=13;
 ymh_flange=7;
 hex_nut_od=6.4;
 
+//Dimensions of y belt holder
+ybelth_bolt_distance=38.5;
+ybelth_bolt_adjust=0.5;
+ybelth_bolt_clamplen=2;
+ybelth_lower=frog_to_frame+ymh_stepper_down-pulley_dia_belt/2;
+ybelth_upper=ybelth_lower+pulley_dia_belt-idler_dia_belt;
+ybelth_flange=8;
+ybelth_thickn=14;
+ybelth_grabwidth=30;
+//Belt dimensione
+belt_slot_height=1.95;
+belt_tooth_height=1.25;
+belt_width=6;
 //X end
 
 rp_dia=7.8; //Rodpocket

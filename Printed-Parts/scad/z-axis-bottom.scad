@@ -17,7 +17,7 @@ module bolthole(){
     rotate([0,270,0])
     
     translate([0,0,-10+zab_bolt_clamping_length+zrod_frame_distance-zab_frame_flange]){
-            cylinder(d=2.1*m3_through_dia,h=10,$fn=25);
+            cylinder(d=2.5*m3_through_dia,h=10,$fn=25);
             cylinder(d=m3_through_dia,h=60,center=true,$fn=25);
         }
 }
@@ -54,7 +54,7 @@ module bolthole(){
     translate([0,-zab_bolt_spacing/2,zab_lower_bolt]) bolthole();
     translate([0,zab_bolt_spacing/2,zab_lower_bolt]) bolthole();
     translate([0,0,zab_lower_bolt+zab_bolt_spacing]) bolthole();
-    translate([-zrod_frame_distance+zab_frame_flange,0,zab_height])cube([2*(zab_frame_flange-zab_bolt_clamping_length),2.1*m3_through_dia,2*(zab_height-zab_lower_bolt-zab_bolt_spacing)],center=true);
+    translate([-zrod_frame_distance+zab_frame_flange,0,zab_height])cube([2*(zab_frame_flange-zab_bolt_clamping_length),2.5*m3_through_dia,2*(zab_height-zab_lower_bolt-zab_bolt_spacing)],center=true);
     
     translate([xstepper_width/2,xstepper_width/2+zab_reinf_inner,0])rotate([0,0,0])fillet(8,30);
 translate([xstepper_width/2,-xstepper_width/2-zab_reinf_outer,0])rotate([0,0,270])fillet(8,30);

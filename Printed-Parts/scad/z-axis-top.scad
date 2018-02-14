@@ -23,8 +23,8 @@ module cut(){
         rotate([0,90,0]){
             cylinder(d=m3_through_dia,h=30,center=true,$fn=25);
             translate([0,0,zat_bolt_clamping]){
-                cylinder(d=1.8*m3_through_dia,h=15,$fn=25);
-                translate([-20,-0.9*m3_through_dia,0])cube([20,1.8*m3_through_dia,15]);
+                cylinder(d=2*m3_through_dia,h=15,$fn=25);
+                translate([-20,-1*m3_through_dia,0])cube([20,2*m3_through_dia,15]);
             }
         }
     }

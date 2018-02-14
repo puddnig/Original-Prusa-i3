@@ -26,7 +26,7 @@ module xstepper_holes_chamfer(hh,dd1,dd2){
 module cut(){
     translate([0,xstepper_setback,xstepper_height]){
         xstepper_holes(50,m3_through_dia);
-        translate ([xstepper_z_distance+0.02,0,0])xstepper_holes_chamfer(cube_width+belt_offset-xstepper_guide_setback+xstepper_bolt_depth-xstepper_bolt_length,10,6);
+        translate ([xstepper_z_distance+0.02,0,0])xstepper_holes_chamfer(tens_height+cube_width+belt_offset-xstepper_guide_setback+xstepper_bolt_depth-xstepper_bolt_length,11,6);
         
         rotate([-90,0,90]) longhole(5,xstepper_cutout_dia,50);
     }
@@ -41,11 +41,16 @@ module cut(){
     translate([0,xstepper_setback,xstepper_height+xstepper_cutout_dia*0.45])chamfer(4,100);
     translate([0,rear_flange_distance,xstepper_height+5])chamfer(2,100);
     translate([0,xstepper_setback+tighten_range+xstepper_cutout_dia/2-2,xstepper_height+5])chamfer(5,100);
+    
+    //chamfer_to_stepper_guide
+    translate([-rod_xz_distance-cube_width/2+xstepper_guide_setback,rear_flange_distance,cube_height/2+xstepper_guide_height])rotate([0,90,0])chamfer(3.5,cube_height);
+    
+    translate([-rod_xz_distance,rear_flange_distance,0])chamfer(10,2*cube_width);
 
 }
 module add(){
     x_end(rear_flange_distance,-7,xstepper_height);
-    translate([xstepper_z_distance,xstepper_setback,xstepper_height])xstepper_holes(17,10);
+    translate([xstepper_z_distance,xstepper_setback,xstepper_height])xstepper_holes(17,12);
     translate([-belt_offset+xstepper_z_distance-cube_width-0.01,bearing_diameter/2,0])cube([belt_offset+0.01,rear_flange_distance,cube_height]);
     translate([-belt_offset+xstepper_z_distance,bearing_diameter/2,0])cube([belt_offset+0.01,rear_flange_distance,cube_height]);
     
@@ -57,3 +62,4 @@ difference(){
     add();
     cut();
 }
+

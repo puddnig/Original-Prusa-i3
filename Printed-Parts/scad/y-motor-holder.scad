@@ -46,8 +46,10 @@ translate([-8,-ymh_stepper_down,0])rotate([0,0,-90])fillet(4,20);
 //chamfers
 translate([-xstepper_width/2,ymh_bolt_height-ymh_stepper_down-5,ymh_width])chamfer(4,30);
 translate([-xstepper_width/2,ymh_height-ymh_stepper_down,ymh_width])chamfer(4,30);
-        translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height,ymh_stepper_side])hexhole();
-        translate([-ymh_stepper_in,-ymh_stepper_down+ymh_bolt_height+ymh_bolt_distance,ymh_stepper_side])hexhole();
+translate([0.5-ymh_stepper_in+ymh_flange,-ymh_stepper_down+ymh_bolt_height,ymh_stepper_side])rotate([0,-90,0])hexhole_bottom(m3_through_dia,hex_nut_od,0.5+ymh_flange-ymh_bolt_clamping_length_frame,0);
+translate([0.5-ymh_stepper_in+ymh_flange,ymh_bolt_distance-ymh_stepper_down+ymh_bolt_height,ymh_stepper_side])rotate([0,-90,0])hexhole_bottom(m3_through_dia,hex_nut_od,0.5+ymh_flange-ymh_bolt_clamping_length_frame,0);
+
+
 }}
 
 difference(){add(); cut();}
