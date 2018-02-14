@@ -1,63 +1,56 @@
 // PRUSA iteration4
 // Y belt idler
 // GNU GPL v3
+// 2018 <puddnig@gmail.com>
 // Josef Průša <iam@josefprusa.cz> and contributors
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://prusamendel.org
 
-module Y_belt_idler()
-{
-    difference()
-    { 
-        // base block
-        translate([-12.5,-20,5]) cube([25,20,35]);
-        translate([-4.75,-27,-1]) cube([9.5,20,50]); 
-        
-        // angled front side   
-        translate([-15,-19.5,-15]) rotate([37,0,0]) cube([30,20,40]); 
-        translate([-15,-12,-15]) rotate([60,0,0]) cube([30,20,40]); 
-        translate([-15,-20,29.5]) rotate([38,0,0]) cube([30,20,20]); 
+include<variables.scad>
+use<fdmtools.scad>
+use<polyholes.scad>
 
-        // screws
-        translate([0,1,36]) rotate([90,0,0]) cylinder( h=25, r=1.65, $fn=30 ); 
-        translate([0,-2,36]) rotate([90,0,0]) cylinder( h=6, r=3.2 , $fn=6 ); 
-        translate([0,1,10]) rotate([90,0,0]) cylinder( h=25, r=1.65, $fn=30 ); 
-        translate([0,-2,10]) rotate([90,0,0]) cylinder( h=6, r=3.2 , $fn=6 ); 
-        translate([0,-5,36]) rotate([90,0,0]) cylinder( h=6, r=3.2 , r2=3.9, $fn=6 ); 
-        translate([0,-5,10]) rotate([90,0,0]) cylinder( h=6, r=3.2 , r2=3.9, $fn=6 );
-        translate([0,1,36]) rotate([90,0,0]) cylinder( h=2, r=2.5, r2=1.65,$fn=30 ); 
-        translate([0,1,10]) rotate([90,0,0]) cylinder( h=2, r=2.5, r2=1.65,$fn=30 ); 
-        
-        // pulley cut
-        translate([-5,-14,22.5]) rotate([0,90,0]) cylinder( h=10, r=10, $fn=30 ); 
-           
-        // pulley screw axis 
-        translate([-13.5,-14,22.5]) rotate([0,90,0]) cylinder( h=30, r=1.6, $fn=30 ); 
-        translate([-14,-14,22.5]) rotate([0,90,0]) cylinder( h=7, r=3.2, $fn=6 ); 
-        translate([-14,-14,22.5]) rotate([0,90,0]) cylinder( h=4, r2=3.2, r1=4, $fn=6 ); 
-        translate([8,-14,22.5]) rotate([0,90,0]) cylinder( h=6, r=3.2, $fn=30 ); 
-        
-        // selective infill
-        translate([-10,-18,18]) cube([3,17,0.5]);
-        translate([8,-18,18]) cube([3,17,0.5]);
-        translate([-10,-18,27]) cube([3,17,0.5]);
-        translate([8,-18,27]) cube([3,17,0.5]);
-        translate([-10,-17,16]) cube([3,15,0.5]);
-        translate([8,-17,16]) cube([3,15,0.5]);
-        translate([-10,-16,29]) cube([3,15,0.5]);
-        translate([8,-16,29]) cube([3,15,0.5]);
-        translate([-8,-2,30]) cube([16,1,0.5]);
-        translate([-8,-2,13]) cube([16,1,0.5]);
-        
-        // upper side mark
-        translate([8.5,-3.5,39]) rotate([0,0,0]) cylinder( h=2, r=1.5, $fn=30 ); 
-        
-        //version   
-        translate([3.5,-0.5,20]) rotate([90,0,180]) linear_extrude(height = 0.6) 
-        { text("R1",font = "helvetica:style=Bold", size=4, center=true); }
-    }
+ybi_frame_height=38.5;
+ybi_width=25;
+ybi_pulley_width=10;
+ybi_pulley_dia=20;
+ybi_pulley_to_frame=14;
+ybi_pulley_to_frame_top=ymh_stepper_down-(idler_dia_belt-pulley_dia_belt)/2;
+ybi_bolt_spacing=26;
+ybi_bolt_to_frame=4;
+ybi_height=ybi_pulley_to_frame+6;
+ybi_flange_offset=2;
+ybi_clamping_length_pulley=2.5;
+ybi_clamping_length=2;
+
+flange=ybi_pulley_to_frame-ybi_pulley_dia/2+ybi_flange_offset;
+module add(){
+    translate([-ybi_width/2,0,0])cube([ybi_width,2*ybi_pulley_to_frame_top,ybi_height]);
+}
+
+module cut(){
+    translate([-ybi_pulley_width/2,-1,flange])cube([ybi_pulley_width,ybi_frame_height+2,ybi_height]);
     
-}   
-    
-rotate([-90,0,0]) Y_belt_idler(); 
+    translate([0,ybi_pulley_to_frame_top,ybi_pulley_to_frame])rotate([0,90,0])cylinder(d=ybi_pulley_dia,h=ybi_pulley_width,center=true);
+    //Nut pocket
+    translate([0,ybi_bolt_to_frame,flange])rotate([180,0,0])hexhole_bottom(m3_through_dia,lock_nut_od,flange-ybi_clamping_length,0);
+translate([0,ybi_bolt_to_frame+ybi_bolt_spacing,flange])rotate([180,0,0])hexhole_bottom(m3_through_dia,lock_nut_od,flange-ybi_clamping_length,0);
+    //pulley bolt
+    translate([ybi_width/2,ybi_pulley_to_frame_top,ybi_pulley_to_frame])rotate([0,-90,0])hexhole_bottom(m3_through_dia,lock_nut_od,(ybi_width-ybi_pulley_width)/2-ybi_clamping_length_pulley,0);
+translate([-ybi_width/2,ybi_pulley_to_frame_top,ybi_pulley_to_frame])rotate([0,90,0])hole_bottom(m3_through_dia,2.1*m3_through_dia,(ybi_width-ybi_pulley_width)/2-ybi_clamping_length_pulley,0);
+    //fillet
+    translate([0,0,ybi_height])rotate([90,-90,90])fillet(3,ybi_width+2);
+translate([0,2*ybi_pulley_to_frame_top,ybi_height])rotate([90,0,90])fillet(3,ybi_width+2);
+
+}
+
+difference(){add(); cut();}
+
+//translate([0,ybi_pulley_to_frame_top,ybi_pulley_to_frame])rotate([0,90,0])cylinder(d=ybi_pulley_dia,h=ybi_pulley_width,center=true);
+translate([0,3,ybi_height-3])rotate([0,90,0])cylinder(r=3,h=ybi_pulley_width+2,$fn=2*sides(3),center=true);
+translate([0,2*ybi_pulley_to_frame_top-3,ybi_height-3])rotate([0,90,0])cylinder(r=3,h=ybi_pulley_width+2,$fn=2*sides(3),center=true);
+
+
+
+
 
