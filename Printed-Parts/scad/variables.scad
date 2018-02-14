@@ -22,7 +22,15 @@ cube_width=17;
 //overhang_rear=0;
 cube_height=58;
 
-
+//y rod holder
+yrh_height=15.2;
+yrh_width=26;
+yrh_depth=10;
+yrod_to_ext=10.5;
+yrh_hole_height=3.5;
+yrh_hole_spacing=11;
+yrh_nut_in=1.8;
+yrh_ext_slot=8;
 //Y Motor HOlder
 
 ymh_bolt_clamping_length_frame=3.5;

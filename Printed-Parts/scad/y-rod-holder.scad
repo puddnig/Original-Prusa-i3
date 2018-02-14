@@ -10,19 +10,10 @@ include<variables.scad>
 use<fdmtools.scad>
 use<polyholes.scad>
 
-yrh_height=15.2;
-yrh_width=26;
-yrh_depth=10;
-yrod_to_ext=10.5;
-yrh_hole_height=3.5;
-yrh_hole_spacing=11;
-yrh_nut_in=1.8;
-yrh_ext_slot=8;
-
 
 module hole(){
-translate([0,0,-1])cylinder(d=m3_through_dia,h=7,$fn=20);
-translate([0,0,yrh_nut_in])quad_hole_bottom(m3_through_dia,square_nut_w,square_nut_d,0.2);
+translate([0,0,-1])cylinder(d=m3_through_dia,h=8.5,$fn=20);
+translate([0,0,yrh_nut_in])quad_hole_bottom(m3_through_dia,square_nut_w,square_nut_d,0.4);
 translate([-square_nut_w/2,-8+square_nut_w/2,yrh_nut_in])cube([square_nut_w,8,square_nut_d]);}
 
 module add(){
