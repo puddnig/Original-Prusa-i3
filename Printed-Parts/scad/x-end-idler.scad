@@ -15,8 +15,9 @@ module pulley(){
 translate([-rod_xz_distance+cube_width/2+belt_offset,idler_inward,idler_height]) rotate([0,-90,0]){
     translate([0,0,1])mirror([0,0,1])cylinder(r=3.1,h=10,$fn=30);
     cylinder(r=m3_through_dia/2,h=60,$fn=30);
-    rotate([0,0,30])translate([0,0,cube_width-1.5])cylinder(r=3.2,h=20,$fn=6);
-    translate([0,0,cube_width/2])cylinder(d=pulley_dia,h=bs_w,center=true);
+
+    translate([0,0,cube_width/2])cylinder(d=pulley_dia,h=bs_w,center=true);  
+    translate([0,0,10+cube_width-1.5])rotate([180,0,0])hexhole_bottom(m3_through_dia,lock_nut_od,10,0);
     
     //stress relief
     
