@@ -13,7 +13,7 @@ use<polyholes.scad>
 
 module hole(){
 translate([0,0,-1])cylinder(d=m3_through_dia,h=8.5,$fn=20);
-translate([0,0,yrh_nut_in])quad_hole_bottom(m3_through_dia,square_nut_w,square_nut_d,0.4);
+translate([0,0,yrh_nut_in])rotate([0,0,90])quad_hole_bottom(m3_through_dia,square_nut_w,square_nut_d,0.4);
 translate([-square_nut_w/2,-8+square_nut_w/2,yrh_nut_in])cube([square_nut_w,8,square_nut_d]);}
 
 module add(){
@@ -33,6 +33,8 @@ translate([0,yrod_to_ext,yrh_depth-1.5])cylinder(d2=rp_dia+1.5,d1=rp_dia,h=2);
     //fillet
     translate([yrh_width/2,yrh_height,yrh_depth/2])rotate([0,0,0])fillet(8,yrh_depth+1);
 translate([-yrh_width/2,yrh_height,yrh_depth/2])rotate([0,0,90])fillet(8,yrh_depth+1);
+    translate([0,yrh_height,yrh_depth/2])cube([1,5,15],center=true);
+
 
 }
 difference(){add();cut();}
