@@ -22,10 +22,10 @@ module pushfit_rod() {
     dia_wp_corr=correctedDiameter(dia_wp);
     rp_h_straight=1+rp_depth-wp_length_straight-wp_length_taper;
     translate ([0,0,-1]) union(){
-    cylinder (h=rp_h_straight, d=rp_dia_corr);
-    translate (v=[0,0,rp_h_straight]) cylinder(h=wp_length_taper, d1=2*correctedRadius(rp_dia/2,sides(dia_wp_corr)), d2=dia_wp_corr);
-    translate (v=[0,0,rp_h_straight+wp_length_taper]) cylinder (h=wp_length_straight, d=dia_wp_corr);
-    translate (v=[1.416,0,0]) rotate (a=[0,0,22.5]) cylinder (h=rp_depth, d=0.8*rp_dia, $fn=8);
+    cylinder (h=rp_h_straight, d=rp_dia_corr,$fn=sides(rp_dia/2));
+    translate (v=[0,0,rp_h_straight]) cylinder(h=wp_length_taper, d1=2*correctedRadius(rp_dia/2,sides(dia_wp_corr)), d2=dia_wp_corr,$fn=sides(rp_dia/2));
+    translate (v=[0,0,rp_h_straight+wp_length_taper]) cylinder (h=wp_length_straight, d=dia_wp_corr,$fn=sides(rp_dia/2));
+    translate (v=[1.5,0,0]) rotate (a=[0,0,22.5]) cylinder (h=rp_depth, d=0.8*rp_dia, $fn=8);
     }
 }
 
@@ -109,7 +109,7 @@ module nut_reinf(){
     module nut_reinf_rem(){
          translate([0,0,nut_height-0.001]) cylinder(r=nut_outer_corr-nut_reinf_wall,h=nut_trap_reinf_height+0.01);
         rotate([0,0,-135])  translate([-nut_outer_corr+nut_reinf_wall,0,nut_height+0.001]) cube([2*(nut_outer_corr-nut_reinf_wall),nut_outer_corr,nut_trap_reinf_height]);  
-        translate([0,nut_outer_corr,nut_trap_reinf_height+nut_height]) rotate ([0,90,nut_reinf_rotate])linear_extrude(height=3*nut_outer_corr,center=true)scale([nut_trap_reinf_height/nut_outer_corr,nut_reinf_pushback]) circle(r=nut_outer_corr);
+        translate([0,nut_outer_corr,nut_trap_reinf_height+nut_height]) rotate ([0,90,nut_reinf_rotate])linear_extrude(height=3*nut_outer_corr,center=true)scale([nut_trap_reinf_height/nut_outer_corr,nut_reinf_pushback]) circle(r=nut_outer_corr,$fn=50);
     }
     difference(){
         nut_reinf_add();
