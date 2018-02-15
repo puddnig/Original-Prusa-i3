@@ -13,7 +13,7 @@ use <fdmtools.scad>
 
 module pulley(){
 translate([-rod_xz_distance+cube_width/2+belt_offset,idler_inward,idler_height]) rotate([0,-90,0]){
-    translate([0,0,1])mirror([0,0,1])cylinder(r=3.1,h=10,$fn=30);
+    translate([0,0,2.8])mirror([0,0,1])cylinder(r=3.1,h=10,$fn=30);
     cylinder(r=m3_through_dia/2,h=60,$fn=30);
 
     translate([0,0,cube_width/2])cylinder(d=pulley_dia,h=bs_w,center=true);  
