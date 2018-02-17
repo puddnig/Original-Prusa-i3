@@ -12,7 +12,7 @@ square_nut_w=6;
 square_nut_d=2;
 lock_nut_od=6.4;
 rod_h=6; //Distance upper x_rod to top of part (bottom here)
-rod_distance=45; //distance between x rods
+rod_distance=70; //distance between x rods
 rod_xz_distance=15;
 hex_nut_od=6.4;
 //rod_z_flange=28.5;//Distanze Z-rod to side of part in Y direction
@@ -20,7 +20,7 @@ hex_nut_od=6.4;
 //rod_xend_z_distance=1; //Distance between end of x rod to center of z rod in y direction
 cube_width=17;
 //overhang_rear=0;
-cube_height=58;
+cube_height=80;
 
 //y rod holder
 yrh_height=15.2;
@@ -72,7 +72,7 @@ end_adjust=0.1;
 bearing_reinforcement=1.2;
 bearing_diameter=14.8;
 bearing_height=25;
-bs_to_top=14;
+bs_to_top=11;
 
 bearing_holder_wall = 3;
 
@@ -88,20 +88,17 @@ nut_reinf_rotate=17.5;
 
 //Variables used by x-end-idler:
 pulley_dia=20;
-idler_height=28.5;
 idler_inward=15.5;
-stress_relieve_height=27.5;
+stress_relieve_height=20;
 stress_relieve_offset=4.5;
 
 //Variables used by x-end-motor:
-xstepper_height=30.25;
 xstepper_width=42.5;
 xstepper_setback=33;
 xstepper_bolt_distance=31;
 tighten_range=5;
 rear_flange_distance=62;
 xstepper_guide_setback=2;
-xstepper_guide_height=8;
 xstepper_cutout_dia=25;
 xstepper_bolt_length=18;
 xstepper_bolt_depth=4;
@@ -133,13 +130,35 @@ zat_pocket_outer=16;
 //nema17 Bolt pattern
 sd=xstepper_bolt_distance/2;
 nema17_pattern=[[sd,sd,0],[sd,-sd,0],[-sd,-sd,0],[-sd,sd,0]];
+//Aero Carriage
+cr_width=52;
+rod_to_face=15.5;
+face_thickn=2;
+bearing_holder_od=21;
+nozzle_to_stepper=45.5;
+nozzle_to_top_rod=78;
+bearing_dia_carri=14.75;
+e_stepper_width=42.5;
+belt_to_stepper=24.5;
+htr=nozzle_to_top_rod-nozzle_to_stepper;
+rod_distance=66;
 
+Z_axis_offset=14;
+pinda_forward=10.5;
+pinda_side=23;
+nozzle_side=11.5;
 
+ph_height=12;
+ph_nozzle=23;
+//
 nut_outer_corr=correctedRadius(nut_outer,sides(nut_outer));
 nut_inner_corr=correctedRadius(nut_inner,sides(nut_inner));
 
 rod_z_flange=nut_offset+correctedRadius(nut_outer,sides(nut_outer));
 
+idler_height=rod_h+htr+belt_to_stepper-idler_dia_belt/2;
+xstepper_height=rod_h+htr+belt_to_stepper-pulley_dia_belt/2;
+xstepper_guide_height=cube_height-xstepper_height-22.5;
 
 
 bearing_size = bearing_diameter + 2 * bearing_holder_wall;

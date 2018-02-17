@@ -1,0 +1,4 @@
+
+*.gcode
+*.stl
+Printed-Parts/scad/playground.scad

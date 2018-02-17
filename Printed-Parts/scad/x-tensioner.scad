@@ -9,7 +9,7 @@ tens_block_width=18;
 tens_block_height=18;
 tens_block_depth=10;
 tens_bolt_height=11;
-wh=xstepper_height-xstepper_guide_height;//width half
+wh=22.5;//width half
 dt=rear_flange_distance-xstepper_setback;//depth tensioner
 module bolthole(){
     cylinder(d=m3_through_dia,h=50,center=true,$fn=25);

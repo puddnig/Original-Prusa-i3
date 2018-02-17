@@ -76,7 +76,7 @@ module bigcube_pretty2(){
 module vertical_bearing_base()
 {
  translate ([-rod_xz_distance+cube_width/2,-bearing_size/2,0])cube([rod_xz_distance-cube_width/2,bearing_size,cube_height]);
- cylinder(h = 58, r=bearing_size/2, $fn = 90);
+ cylinder(h = cube_height, r=bearing_size/2, $fn = 90);
 }
 
 module vertical_bearing_holes()
