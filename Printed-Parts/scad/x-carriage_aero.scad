@@ -36,7 +36,7 @@ module cut(){
 translate([0,-rod_distance+htr,rod_to_face]){
     translate([0,0,10])cube([cr_width+3,6,10],center=true);//slot
     rotate([0,90,0])difference(){
-    cylinder(d=bearing_dia_carri,h=cr_width+2,center=true);
+    poly_cylinder(r=bearing_dia_carri/2,h=cr_width+2,center=true);
     translate([10,-0,0])cube([10,bearing_dia_carri,cr_width-2*bearing_height],center=true);
 }
  }
@@ -44,7 +44,7 @@ translate([0,-rod_distance+htr,rod_to_face]){
  translate([0,htr,rod_to_face]){
     translate([0,0,10])cube([cr_width+3,6,10],center=true);//slot
     rotate([0,90,0])difference(){
-    cylinder(d=bearing_dia_carri,h=cr_width+2,center=true);
+    poly_cylinder(r=bearing_dia_carri/2,h=cr_width+2,center=true);
 
     }}
  //stepper_mount
